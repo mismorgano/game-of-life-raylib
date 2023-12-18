@@ -4,10 +4,9 @@
 
 #include "raylib.h"
 #include "raymath.h"
-#include <iostream>
-#include <vector>
-using namespace std;
+#include "src/World.h"
 
+using namespace std;
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
@@ -18,12 +17,14 @@ int main() {
     int columns = 30;
 
 
-    auto cellSize = 10;
+    auto cellSize = 20;
     // Initialization
 
     //--------------------------------------------------------------------------------------
     const int screenWidth = cellSize * columns;
     const int screenHeight = cellSize * rows;
+    vector<pair<int, int>> aliveCells{make_pair(10, 10), make_pair(11, 10), make_pair(10, 11), make_pair(11, 11)};
+    World world{rows, columns, aliveCells};
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - 2d camera mouse zoom");
 
@@ -33,7 +34,7 @@ int main() {
     SetTargetFPS(60);                   // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
-    vector<pair<int, int>> cellsAlives{make_pair(10, 10)};
+
     // Main game loop
     while (!WindowShouldClose())        // Detect window close button or ESC key
     {
@@ -71,6 +72,7 @@ int main() {
         //----------------------------------------------------------------------------------
         int slices = 100;
         int spacing = cellSize;
+        world.update();
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
@@ -84,6 +86,7 @@ int main() {
             DrawLine(0, spacing*i, screenWidth, spacing*i, BEIGE);
         }
 
+        world.draw(cellSize);
         EndMode2D();
 //        GuiButton((Rectangle){ 0, 0, 125, 30 }, GuiIconText(ICON_FILE_SAVE, "Save File"));
 
