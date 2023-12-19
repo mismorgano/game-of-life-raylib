@@ -22,8 +22,9 @@ title: Conway's game of life, a tutorial
 email: mismorgano@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Un tutorial para implementar el juego de la vida de Conway.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+domain: mismorgano.github.io
+baseurl: /game-of-life-raylib/ # the subpath of your site, e.g. /blog
+url: https://mismorgano.github.io # the base hostname & protocol for your site, e.g. http://example.com
 #twitter_username: jekyllrb
 github_username:  mismorgano
 
