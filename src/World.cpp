@@ -7,7 +7,9 @@
 #include <vector>
 #include <ranges>
 #include <set>
+
 using namespace std;
+
 #include "raylib.h"
 
 bool World::isInWorld(int row, int column) const {
@@ -33,10 +35,10 @@ int World::count_neighbors(int row, int column) const {
 
 World::World(int rows, int columns, std::vector<std::pair<int, int>> aliveCells)
         : rows(rows), columns(columns), aliveCells(std::move(aliveCells)) {
-    for(const auto &i: views::iota(1, rows)) {
+    for (const auto &i: views::iota(1, rows)) {
         cells.emplace_back(columns);
     }
-    for (const auto & cell:this->aliveCells) {
+    for (const auto &cell: this->aliveCells) {
         int row = cell.first;
         int column = cell.second;
         cells[row][column] = 1;
@@ -49,8 +51,9 @@ void World::makeAlive(int row, int column) {
 
 void World::update() {
     vector<pair<int, int>> alives{};
+    vector<pair<int, int>> deads{};
     set<pair<int, int>> cellsToCheck{};
-    for (const auto &cell: aliveCells ) {
+    for (const auto &cell: aliveCells) {
         int row = cell.first;
         int column = cell.second;
         for (int i = -1; i <= 1; i++) {
@@ -64,21 +67,50 @@ void World::update() {
             }
         }
     }
-    for (const auto& cell: cellsToCheck ) {
+    for (const auto &cell: cellsToCheck) {
         int row = cell.first;
         int column = cell.second;
-        if (count_neighbors(row, column) == 3)
+        int cn = count_neighbors(row, column);
+        if (cn == 3)
             alives.emplace_back(row, column);
+        else if (cells[row][column] == 1 && cn == 2) {
+            alives.emplace_back(row, column);
+        } else {
+            deads.emplace_back(row, column);
+        }
+
+    }
+    for (const auto &cell: alives) {
+        int row = cell.first;
+        int column = cell.second;
+        cells[row][column] = 1;
+    }
+    for (const auto &cell: deads) {
+        int row = cell.first;
+        int column = cell.second;
+        cells[row][column] = 0;
     }
     aliveCells = alives;
 }
 
 void World::draw(int cellSize) {
-    for (const auto & cell:aliveCells) {
+    for (const auto &cell: aliveCells) {
         int row = cell.first;
         int column = cell.second;
-        DrawRectangle(column*cellSize, row*cellSize, cellSize, cellSize, BEIGE);
+        DrawRectangle(column * cellSize, row * cellSize, cellSize, cellSize, GRAY);
     }
+
+    // for (size_t row = 0; row < rows; row++)
+    // {
+    //     for (size_t col = 0; col < columns; col++)
+    //     {
+    //         if(cells[row][col]) {
+    //             DrawRectangle(col*cellSize, row*cellSize, cellSize, cellSize, RED);
+    //         }
+    //     }
+
+    // }
+
 
 }
 

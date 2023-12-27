@@ -23,7 +23,7 @@ int main() {
     //--------------------------------------------------------------------------------------
     const int screenWidth = cellSize * columns;
     const int screenHeight = cellSize * rows;
-    vector<pair<int, int>> aliveCells{make_pair(10, 10), make_pair(11, 10), make_pair(10, 11), make_pair(11, 11)};
+    vector<pair<int, int>> aliveCells{make_pair(10, 10), make_pair(11, 10), make_pair(9, 10)};
     World world{rows, columns, aliveCells};
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - 2d camera mouse zoom");
@@ -79,14 +79,15 @@ int main() {
         ClearBackground(BLACK);
 
         BeginMode2D(camera);
+
+        world.draw(cellSize);
         for (int i = 0; i < columns; ++i) {
             DrawLine(spacing * i, 0, spacing * i, screenHeight, BEIGE);
         }
         for (int i = 0; i < rows; ++i) {
-            DrawLine(0, spacing*i, screenWidth, spacing*i, BEIGE);
+            DrawLine(0, spacing * i, screenWidth, spacing * i, BEIGE);
         }
 
-        world.draw(cellSize);
         EndMode2D();
 //        GuiButton((Rectangle){ 0, 0, 125, 30 }, GuiIconText(ICON_FILE_SAVE, "Save File"));
 
