@@ -13,6 +13,6 @@ sobre el juego de la vida en la [wiki](https://conwaylife.com/wiki/).
 
 Para una referencia mas ordenada de lo anterior tenemos [Coding Life simulators](https://conwaylife.com/wiki/Tutorials/Coding_Life_simulators).
 
-== Objetivo
+## Objetivo
 
 Lo que me propongo hacer es simlemente seguir el tutorial y traducir lo que crea importante y prudente. 
