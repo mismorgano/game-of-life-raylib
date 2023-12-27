@@ -8,5 +8,5 @@ find_package(raylib REQUIRED)
 add_executable(game_of_life main.cpp
         src/World.h
         src/World.cpp
-        libraries/raygui.h)
+        )
 target_link_libraries(game_of_life raylib)
