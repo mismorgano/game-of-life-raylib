@@ -16,7 +16,7 @@ int main() {
     int rows = 20;
     int columns = 30;
 
-
+    float time{};
     auto cellSize = 20;
     // Initialization
 
@@ -31,12 +31,12 @@ int main() {
     Camera2D camera = {0};
     camera.zoom = 1.0f;
 
-    SetTargetFPS(60);                   // Set our game to run at 60 frames-per-second
+    SetTargetFPS(60); // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
 
     // Main game loop
-    while (!WindowShouldClose())        // Detect window close button or ESC key
+    while (!WindowShouldClose()) // Detect window close button or ESC key
     {
         // Update
         //----------------------------------------------------------------------------------
@@ -72,7 +72,13 @@ int main() {
         //----------------------------------------------------------------------------------
         int slices = 100;
         int spacing = cellSize;
-        world.update();
+        time += GetFrameTime();
+        if (time > 0.5) {
+            world.update();
+            time = 0;
+        }
+
+
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
@@ -89,7 +95,7 @@ int main() {
         }
 
         EndMode2D();
-//        GuiButton((Rectangle){ 0, 0, 125, 30 }, GuiIconText(ICON_FILE_SAVE, "Save File"));
+        //        GuiButton((Rectangle){ 0, 0, 125, 30 }, GuiIconText(ICON_FILE_SAVE, "Save File"));
 
         EndDrawing();
         //----------------------------------------------------------------------------------
@@ -97,7 +103,7 @@ int main() {
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    CloseWindow();        // Close window and OpenGL context
+    CloseWindow(); // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
     return 0;
 }
