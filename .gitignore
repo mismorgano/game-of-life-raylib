@@ -3,6 +3,10 @@ _site
 .jekyll-cache
 .jekyll-metadata
 vendor
+.cache
 
 .idea
 .vscode
+
+build
+cmake-build-debug
