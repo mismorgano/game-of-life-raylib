@@ -12,8 +12,8 @@ using namespace std;
 
 #include "raylib.h"
 
-bool World::isInWorld(int row, int column) const {
-    return (0 <= row && row < rows && 0 <= column && column < columns);
+bool World::isInWorld(const int row, int column) const {
+    return 0 <= row && row < rows && 0 <= column && column < columns;
 }
 
 
@@ -33,8 +33,8 @@ int World::count_neighbors(int row, int column) const {
     return count;
 }
 
-World::World(int rows, int columns, std::vector<std::pair<int, int>> aliveCells)
-        : rows(rows), columns(columns), aliveCells(std::move(aliveCells)) {
+World::World(int rows, int columns, std::vector<std::pair<int, int> > aliveCells)
+    : rows(rows), columns(columns), aliveCells(std::move(aliveCells)) {
     for (const auto &i: views::iota(1, rows)) {
         cells.emplace_back(columns);
     }
@@ -46,13 +46,12 @@ World::World(int rows, int columns, std::vector<std::pair<int, int>> aliveCells)
 }
 
 void World::makeAlive(int row, int column) {
-
 }
 
 void World::update() {
-    vector<pair<int, int>> alives{};
-    vector<pair<int, int>> deads{};
-    set<pair<int, int>> cellsToCheck{};
+    vector<pair<int, int> > livingCells{};
+    vector<pair<int, int> > deadCells{};
+    set<pair<int, int> > cellsToCheck{};
     for (const auto &cell: aliveCells) {
         int row = cell.first;
         int column = cell.second;
@@ -72,25 +71,24 @@ void World::update() {
         int column = cell.second;
         int cn = count_neighbors(row, column);
         if (cn == 3)
-            alives.emplace_back(row, column);
+            livingCells.emplace_back(row, column);
         else if (cells[row][column] == 1 && cn == 2) {
-            alives.emplace_back(row, column);
+            livingCells.emplace_back(row, column);
         } else {
-            deads.emplace_back(row, column);
+            deadCells.emplace_back(row, column);
         }
-
     }
-    for (const auto &cell: alives) {
+    for (const auto &cell: livingCells) {
         int row = cell.first;
         int column = cell.second;
         cells[row][column] = 1;
     }
-    for (const auto &cell: deads) {
+    for (const auto &cell: deadCells) {
         int row = cell.first;
         int column = cell.second;
         cells[row][column] = 0;
     }
-    aliveCells = alives;
+    aliveCells = livingCells;
 }
 
 void World::draw(int cellSize) {
@@ -110,7 +108,4 @@ void World::draw(int cellSize) {
     //     }
 
     // }
-
-
 }
-
