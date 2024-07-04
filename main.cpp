@@ -5,6 +5,8 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "src/World.h"
+#include <iostream>
+#include <cmath>
 
 using namespace std;
 //------------------------------------------------------------------------------------
@@ -16,14 +18,15 @@ int main() {
     int rows = 20;
     int columns = 30;
 
+    int cellSize = 1<<4;
     float time{};
-    auto cellSize = 20;
+
     // Initialization
 
     //--------------------------------------------------------------------------------------
-    const int screenWidth = cellSize * columns;
-    const int screenHeight = cellSize * rows;
-    vector<pair<int, int>> aliveCells{make_pair(10, 10), make_pair(11, 10), make_pair(9, 10)};
+    constexpr int screenWidth = 800;
+    constexpr int screenHeight = 600;
+    const vector aliveCells{make_pair(10, 10), make_pair(11, 10), make_pair(9, 10)};
     World world{rows, columns, aliveCells};
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - 2d camera mouse zoom");
@@ -41,12 +44,12 @@ int main() {
         // Update
         //----------------------------------------------------------------------------------
         // Translate based on mouse right click
-        if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
-            Vector2 delta = GetMouseDelta();
-            delta = Vector2Scale(delta, -1.0f / camera.zoom);
-
-            camera.target = Vector2Add(camera.target, delta);
-        }
+        // if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+        //     Vector2 delta = GetMouseDelta();
+        //     delta = Vector2Scale(delta, -1.0f / camera.zoom);
+        //
+        //     camera.target = Vector2Add(camera.target, delta);
+        // }
 
 
         // Zoom based on mouse wheel
@@ -56,14 +59,14 @@ int main() {
             Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), camera);
 
             // Set the offset to where the mouse is
-            camera.offset = GetMousePosition();
+            // camera.offset = GetMousePosition();
 
             // Set the target to match, so that the camera maps the world space point
             // under the cursor to the screen space point under the cursor at any zoom
-            camera.target = mouseWorldPos;
+            // camera.target = mouseWorldPos;
 
             // Zoom increment
-            const float zoomIncrement = 0.925f;
+            const float zoomIncrement = 1.f;
 
             camera.zoom += (wheel * zoomIncrement);
             if (camera.zoom < zoomIncrement) camera.zoom = zoomIncrement;
@@ -81,21 +84,25 @@ int main() {
 
         // Draw
         //----------------------------------------------------------------------------------
-        BeginDrawing();
-        ClearBackground(BLACK);
+        BeginDrawing(); {
+            ClearBackground(BLACK);
 
-        BeginMode2D(camera);
+            BeginMode2D(camera);
+            world.draw(cellSize);
+            int cols = ceil(screenWidth/spacing);
+            for (int i = 0; i < cols; ++i) {
+                DrawLine(spacing * i, 0, spacing * i, screenHeight, BEIGE);
+            }
+            int rows = ceil(static_cast<float>(screenHeight)/spacing);
+            for (int i = 0; i < rows; ++i) {
+                DrawLine(0, spacing * i, screenWidth, spacing * i, BEIGE);
+            }
 
-        world.draw(cellSize);
-        for (int i = 0; i < columns; ++i) {
-            DrawLine(spacing * i, 0, spacing * i, screenHeight, BEIGE);
+            EndMode2D();
+            //        GuiButton((Rectangle){ 0, 0, 125, 30 }, GuiIconText(ICON_FILE_SAVE, "Save File"));
+
         }
-        for (int i = 0; i < rows; ++i) {
-            DrawLine(0, spacing * i, screenWidth, spacing * i, BEIGE);
-        }
 
-        EndMode2D();
-        //        GuiButton((Rectangle){ 0, 0, 125, 30 }, GuiIconText(ICON_FILE_SAVE, "Save File"));
 
         EndDrawing();
         //----------------------------------------------------------------------------------
