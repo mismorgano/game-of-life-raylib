@@ -18,7 +18,8 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Conway's game of life, a tutorial 
+lang: es
+title: El juego de la vida de Conway
 email: mismorgano@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Un tutorial para implementar el juego de la vida de Conway.
